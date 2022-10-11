@@ -78,12 +78,6 @@ export const asyncRouterMap = [
     name: 'oms',
     meta: { title: '交易管理', icon: 'total-week' },
     children: [
-      // {
-      //   path: 'trade',
-      //   name: 'omsTrade',
-      //   component: () => import('@/views/oms/trade/index.vue'),
-      //   meta: { title: '交易列表', icon: 'order-setting' },
-      // },
       {
         path: 'order',
         name: 'omsOrder',
@@ -103,18 +97,6 @@ export const asyncRouterMap = [
         component: () => import('@/views/oms/order/setting'),
         meta: { title: '订单设置', icon: 'order-setting' }
       },
-      // {
-      //   path: 'trade/money',
-      //   name: 'omstradeMoney',
-      //   component: () => import('@/views/oms/tradeMoney/index.vue'),
-      //   meta: { title: '交易金额', icon: 'total-yesterday' },
-      // },
-      // {
-      //   path: 'order/deal',
-      //   name: 'omsOrderDeal',
-      //   component: () => import('@/views/oms/orderDeal/index.vue'),
-      //   meta: { title: '订单处理', icon: 'order-return-reason' },
-      // },
     ]
   },
   {
