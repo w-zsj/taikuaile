@@ -1,10 +1,4 @@
-<!--
- * @Author: Ayan
- * @Date: 2022-04-02 14:38:20
- * @LastEditors: Ayan
- * @LastEditTime: 2022-04-08 14:01:29
- * @Description: file not
--->
+
 <template> 
   <div class="updeta">
     <el-upload action="#" :auto-upload="false" accept="video" :multiple="false" :show-file-list="showFileList" :file-list="fileList" :on-change="getFile" :on-preview="handlePreview" :on-remove="handleRemove">
@@ -62,10 +56,10 @@ export default {
       }]
     },
     showFileList: {
-      get: function() {
+      get: function () {
         return this.value !== null && this.value !== '' && this.value !== undefined;
       },
-      set: function(newValue) {
+      set: function (newValue) {
       }
     }
   },
@@ -99,7 +93,7 @@ export default {
       var cos = new COS({
         // getAuthorization 必选参数
         Protocol: 'https:',
-        getAuthorization: function(options, callback) {
+        getAuthorization: function (options, callback) {
           // 初始化时不会调用，只有调用cos方法（比如cos.putObject）时才会进入
           // 异步获取临时密钥
           // 服务端 JS 和 PHP 例子：https://github.com/tencentyun/cos-js-sdk-v5/blob/master/server/
@@ -125,11 +119,11 @@ export default {
           Key: 'video/' + new Date().getTime() + '/' + file.name,              /* 必须 */
           StorageClass: 'STANDARD',
           Body: this.dataURLtoBlob(res), // 上传文件对象
-          onProgress: function(progressData) {
+          onProgress: function (progressData) {
             console.log('--->>', progressData);
             _.videoUploadPercent = progressData.percent * 100
           }
-        }, function(err, data) {
+        }, function (err, data) {
           console.log(err || data);
 
           if (data) {
@@ -150,17 +144,17 @@ export default {
 
     },
     getBase64(file) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         const reader = new FileReader();
         let imgResult = "";
         reader.readAsDataURL(file);
-        reader.onload = function() {
+        reader.onload = function () {
           imgResult = reader.result;
         };
-        reader.onerror = function(error) {
+        reader.onerror = function (error) {
           reject(error);
         };
-        reader.onloadend = function() {
+        reader.onloadend = function () {
           resolve(imgResult);
         };
       });

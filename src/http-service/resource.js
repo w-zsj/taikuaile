@@ -1,10 +1,3 @@
-/*
- * @Author: TerryMin
- * @Date: 2021-09-08 17:16:19
- * @LastEditors: Ayan
- * @LastEditTime: 2022-07-04 14:16:48
- * @Description: file not
- */
 import { fetchResource } from './fetchapi';
 
 const API_HOST = '';

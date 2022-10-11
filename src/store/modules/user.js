@@ -1,10 +1,3 @@
-/*
- * @Author: Ayan
- * @Date: 2022-06-10 15:17:51
- * @LastEditors: Ayan
- * @LastEditTime: 2022-06-27 11:01:15
- * @Description: file not
- */
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 

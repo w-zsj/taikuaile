@@ -1,10 +1,3 @@
-/*
- * @Author: Ayan
- * @Date: 2022-02-14 15:22:01
- * @LastEditors: Ayan
- * @LastEditTime: 2022-02-14 15:23:44
- * @Description: file not
- */
 import request from '@/utils/request'
 export function fetchList(parentId, params) {
   return request({

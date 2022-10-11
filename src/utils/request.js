@@ -1,10 +1,3 @@
-/*
- * @Author: Ayan
- * @Date: 2022-06-10 15:17:51
- * @LastEditors: Ayan
- * @LastEditTime: 2022-06-28 09:58:30
- * @Description: file not
- */
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
