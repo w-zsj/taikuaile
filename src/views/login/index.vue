@@ -2,10 +2,10 @@
   <div>
     <el-card class="login-form-layout" shadow="never">
       <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-        <div style="text-align: center">
+        <!-- <div style="text-align: center">
           <img :src="logo" class="login-center-layout" />
-        </div>
-        <h2 class="login-title color-main">泰嗨乐管理后台</h2>
+        </div> -->
+        <!-- <h2 class="login-title color-main">泰嗨乐管理后台</h2> -->
         <el-form-item prop="username">
           <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名">
             <span slot="prefix">
