@@ -1,11 +1,8 @@
 <template>
-  <div>
+  <div class="login">
     <el-card class="login-form-layout" shadow="never">
       <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-        <!-- <div style="text-align: center">
-          <img :src="logo" class="login-center-layout" />
-        </div> -->
-        <!-- <h2 class="login-title color-main">泰嗨乐管理后台</h2> -->
+        <h2 class="login-title color-main">泰小驿物流管理</h2>
         <el-form-item prop="username">
           <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名">
             <span slot="prefix">
@@ -36,9 +33,8 @@
           </div>
         </el-form-item>
 
-        <el-form-item style="margin-bottom: 60px; text-align: center">
-          <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
-            登录
+        <el-form-item style=" text-align: center">
+          <el-button class="btn" style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
           </el-button>
         </el-form-item>
       </el-form>
@@ -195,22 +191,38 @@ export default {
 </script>
 
 <style scoped>
+.login {
+  background: #1948a6;
+  overflow: hidden;
+  height: 100vh;
+  background: url("../../assets/images/login_bg.jpg") 0 0 no-repeat;
+  background-size: 100%;
+}
+.el-button.btn {
+  height: 64px;
+  width: 321px;
+  background: url("../../assets/images/login_btn.jpg") 0 0 no-repeat;
+  background-size: 100%;
+  border: 0;
+  padding: 0;
+  transform: scale(0.8);
+}
 .el-card {
   border: 0;
 }
 .color-main {
-  color: #67c23a;
+  color: #1948a6;
 }
 .el-button--primary {
-  background-color: #67c23a;
-  border-color: #67c23a;
+  background-color: #1948a6;
+  border-color: #1948a6;
 }
 .login-form-layout {
-  /* position: absolute;
-  left: 0;
-  right: 0; */
+  position: absolute;
+  right: 300px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 360px;
-  margin: 140px auto;
   /* border-top: 10px solid #409eff; */
 }
 

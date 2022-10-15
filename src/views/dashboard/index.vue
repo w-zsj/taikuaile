@@ -1,39 +1,58 @@
 <template>
   <div class="app-container">
-    <div class="dataUpdateTime">{{ dataUpdateTime }} 更新</div>
-    <div class="overview-layout">
+    <!-- <div class="dataUpdateTime">{{ dataUpdateTime }} 更新</div> -->
+    <div class="list">
       <el-row :gutter="20">
-        <!-- 今天交易额 -->
         <el-col :span="12">
-          <unit :source="3" :payMOney="payMOney"></unit>
+          <div class="item">
+            <div class="tit">待收货</div>
+            <div class="cont flex-aic">
+              <img src="../../assets/images/home_2.jpg" alt="" srcset="">
+              <span>77</span>
+            </div>
+          </div>
         </el-col>
-        <!-- 待处理订单 -->
         <el-col :span="12">
-          <unit :source="1" :waitingPayOrderCount="waitingPayOrderCount"></unit>
+          <div class="item">
+            <div class="tit">待入库</div>
+            <div class="cont flex-aic">
+              <img src="../../assets/images/home_4.jpg" alt="" srcset="">
+              <span>77</span>
+            </div>
+          </div>
         </el-col>
-        <!-- 商品数据 -->
         <el-col :span="12">
-          <unit :source="2" :productInfo="productInfo" :lowStockNumber="lowStockNumber"></unit>
+          <div class="item">
+            <div class="tit">待检货</div>
+            <div class="cont flex-aic">
+              <img src="../../assets/images/home_3.jpg" alt="" srcset="">
+              <span>77</span>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="item">
+            <div class="tit">待出库</div>
+            <div class="cont flex-aic">
+              <img src="../../assets/images/home_1.jpg" alt="" srcset="">
+              <span>77</span>
+            </div>
+          </div>
         </el-col>
       </el-row>
+
     </div>
   </div>
 </template>
 
 <script>
 import { homeApi } from "@/api/home.js";
-import unit from "./comps/unit";
 export default {
   name: "Dashboard",
-  components: { unit },
+  components: {},
   data() {
     return {
-      dataUpdateTime: "", // 更新日期
-      orderInfo: [], // 订单相关数据
-      productInfo: [], // 商品相关数据
-      waitingPayOrderCount: [], // 代付款订单。。。
-      lowStockNumber: null, // 最下库存数
-      payMOney: [],
+      info: {}
     };
   },
   created() {
@@ -44,38 +63,7 @@ export default {
       homeApi().then((res) => {
         if (res.code == 1) {
           let info = res.data;
-          if (info) {
-            let waitingHandleOrderCount = info.waitingHandleOrderCount;
-            let payMOney = this.payMOney
-            waitingHandleOrderCount = waitingHandleOrderCount.filter(i => i.type != 4)
-            waitingHandleOrderCount = [
-              ...waitingHandleOrderCount,
-              {
-                type: 5,
-                value: info.orderCount
-              },
 
-            ]
-            payMOney = [
-              {
-                type: 1,
-                value: info.orderMoneyCount
-              },
-              {
-                type: 2,
-                value: info.recharge
-              }
-            ]
-            console.log('waitingHandleOrderCount', waitingHandleOrderCount)
-            Object.assign(this, {
-              dataUpdateTime: info.dataUpdateTime,
-              lowStockNumber: info.lowStockNumber,
-              productInfo: info.productCount,
-              waitingPayOrderCount: waitingHandleOrderCount,
-              orderInfo: info.orderCount,
-              payMOney,
-            });
-          }
         }
       });
     },

@@ -1,5 +1,4 @@
 <template>
-   
   <div class="app-container">
     <el-card class="filter-container" shadow="never">
       <div style="margin-top: 15px">
@@ -105,7 +104,7 @@
     </div>
   </div>
 </template>
-<script>
+  <script>
 import { fetchList, updateStatus, deleteHomeAdvertise } from "@/api/homeAdvertise";
 import { fetchListWithChildren } from "@/api/productCate";
 import { formatDate } from "@/utils/date";
@@ -125,6 +124,7 @@ const detaultLocationOptions = [
   { label: "首页banner", value: 1 },
   { label: "个人中心", value: 4 },
 ];
+// 无主件管理
 export default {
   name: "homeAdvertiseList",
   data() {
@@ -286,8 +286,8 @@ export default {
     },
   },
 };
-</script>
-<style lang="scss" scoped>
+  </script>
+  <style lang="scss" scoped>
 .app-container {
   height: calc(100vh - 120px);
 }
@@ -305,3 +305,4 @@ export default {
   width: 203px;
 }
 </style>
+  

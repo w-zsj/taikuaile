@@ -7,7 +7,7 @@
         </el-input>
         <span class="note-margin">未付款，订单自动关闭</span>
       </el-form-item>
-      <!-- <el-form-item label="发货超过：" prop="confirmOvertime">
+      <el-form-item label="发货超过：" prop="confirmOvertime">
         <el-input v-model="orderSetting.confirmOvertime" class="input-width">
           <template slot="append">天</template>
         </el-input>
@@ -24,7 +24,7 @@
           <template slot="append">天</template>
         </el-input>
         <span class="note-margin">自动五星好评</span>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="配送费：" prop="deliveryFee">
         <el-input v-model="orderSetting.deliveryFee" class="input-width">
           <template slot="append">฿</template>
