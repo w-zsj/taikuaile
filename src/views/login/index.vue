@@ -4,7 +4,7 @@
       <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
         <h2 class="login-title color-main">泰小驿物流管理</h2>
         <el-form-item prop="username">
-          <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="请输入用户名">
+          <el-input name="username" type="text" v-model.trim="loginForm.username" autoComplete="on" placeholder="请输入用户名">
             <span slot="prefix">
               <svg-icon icon-class="user" class="color-main"></svg-icon>
             </span>
@@ -12,7 +12,7 @@
         </el-form-item>
         <el-form-item prop="code">
           <div class="flex-aic">
-            <el-input name="code" type="text" v-model="loginForm.code" autoComplete="on" placeholder="请输入图形码码">
+            <el-input name="code" type="text" v-model.trim="loginForm.code" autoComplete="on" placeholder="请输入图形码码">
               <span slot="prefix">
                 <svg-icon icon-class="capture" class="color-main"></svg-icon>
               </span>
@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item prop="emailCode">
           <div class="flex-aic">
-            <el-input name="uid" type="text" v-model="loginForm.emailCode" autoComplete="on" placeholder="请输入验证码">
+            <el-input name="uid" type="text" v-model.trim="loginForm.emailCode" autoComplete="on" placeholder="请输入验证码">
               <span slot="prefix">
                 <svg-icon icon-class="code" class="color-main"></svg-icon>
               </span>
