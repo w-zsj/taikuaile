@@ -81,7 +81,7 @@
               <template slot-scope="scope">{{ scope.row.createTime  }}</template>
             </el-table-column>
 
-            <el-table-column label="操作" width="90" align="center" fixed="right">
+            <el-table-column label="操作" width="250" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-button size="mini" type="warning" @click="handleUpdate(scope.$index, scope.row)">催付
                 </el-button>
