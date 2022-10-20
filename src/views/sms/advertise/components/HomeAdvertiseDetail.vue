@@ -3,7 +3,7 @@
     <el-form :model="homeAdvertise" :rules="rules" ref="homeAdvertiseForm" label-width="150px" size="small">
       <el-form-item label="广告位置：" required>
         <el-select v-model="homeAdvertise.type" @change="handleLocationChange">
-          <el-option v-for="type in typeOptions" :key="type.value" :label="type.label" :value="type.value">
+          <el-option v-for="(item,idx) in typeOptions" :key="idx" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -11,7 +11,7 @@
         <el-input v-model="homeAdvertise.name" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="广告图片：" prop="uploadPic">
-        <multiUpload v-model="homeAdvertise.uploadPic" :maxCount='1' :picWidth="picWidth" :picHeight='picHeight' acceptType='.png,.gif,.jpg' :tipText='`${homeAdvertise.type==0?`弹屏尺寸 600px*800px`:`请上传png/jpg/gif图片`}`' />
+        <multiUpload v-model="homeAdvertise.uploadPic" :maxCount='1' :picWidth="picWidth" :picHeight='picHeight' acceptType='.png,.gif,.jpg' :tipText='tipText' />
       </el-form-item>
       <el-form-item label="上线时间：" prop="startTime">
         <el-date-picker type="datetime" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" v-model="homeAdvertise.startTime"></el-date-picker>
@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item v-if='homeAdvertise.urlType === 4' label="页面路径：" prop="pageUrl">
         <el-select v-model="homeAdvertise.pageUrl" placeholder="请选择">
-          <el-option v-for="type in uriOptions" :key="type.value" :label="type.label" :value="type.value">
+          <el-option v-for="(item,idx) in uriOptions" :key="idx" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -74,8 +74,8 @@ import { typeCheckUtil } from '@/utils/index';
 const defaultTypeOptions = [
   { label: '首页弹框', value: 0 },
   { label: '首页banner', value: 1 },
-  { label: '个人中心banner', value: 2 },
-  { label: '个人中心广告位', value: 3 },
+  { label: '中转仓地址', value: 2 },
+  { label: '物流跟踪详情', value: 3 },
 
 ];
 const defaultHomeAdvertise = {
@@ -96,10 +96,10 @@ const defaultHomeAdvertise = {
 };
 const defaultUriOptions = [
   { label: '首页', value: '/pages/home/index' },
-  { label: '分类', value: '/pages/catetory/index' },
-  { label: '搜索页', value: '/pages/search-history/index' },
-  { label: '购物车页面', value: '/pages/mall/index' },
+  { label: '物流跟踪', value: '/pages/logistics/index' },
+  { label: '运费估算', value: '/pages/freight/index' },
   { label: '我的', value: '/pages/mine/index' },
+  { label: '仓库地址', value: '/packPages/china-warehouse/index' },
 ]
 const defaultAdTypeOptions = ['productId', 'adUrl', 'adPic', 'pageUrl',]
 const defaultListQuery = {
@@ -163,7 +163,15 @@ export default {
       total: 0,
       listLoading: false,
       typeSizeEnum: ['686*730px', '686*154px', '600*800px', '686*154px',],
+      tipText: ""
     };
+  },
+  watch: {
+    'homeAdvertise.type': {
+      handler: function (newVal) {
+        this.tipText = newVal == 0 ? "弹屏尺寸 600px*800px" : "请上传png/jpg/gif图片"
+      }
+    }
   },
   mounted() {
     if (this.isEdit) {

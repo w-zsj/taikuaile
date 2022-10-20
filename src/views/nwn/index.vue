@@ -3,13 +3,7 @@
   <div class="app-container">
     <el-card class="filter-container" shadow="never">
       <div style="margin-top: 15px">
-        <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="用户ID：">
-            <el-select v-model="listQuery.status" placeholder="请选择仓库类型" clearable class="input-width">
-              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+        <el-form :inline="true" :model="listQuery" size="small" label-width="140px" :max-height="tableHeight">
           <el-form-item label="运单号：">
             <el-select v-model="listQuery.status" placeholder="请选择归属组织" clearable class="input-width">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -28,31 +22,22 @@
         </el-form>
       </div>
     </el-card>
-    <el-card class="operate-container" shadow="never">
-      <i class="el-icon-tickets"></i>
-      <span>数据列表</span>
-      <span style="float: right">
-        <el-button size="mini" type="primary" style="margin-left:20px;" @click="handleAdd()"> 新增 </el-button>
-        <el-button size="mini" class="btn-add" @click="batchHandleProduct">批量删除</el-button>
-      </span>
-
-    </el-card>
     <div class="table-container">
       <el-card class="operate-container" shadow="never">
         <div class="">
-          <el-table ref="homeAdvertiseTable" :max-height="tableHeight" :data="list" style="width: 100%" @selection-change="handleSelectionChange" v-loading="listLoading" border>
-            <el-table-column type="selection" width="60" align="center" fixed="left"></el-table-column>
+          <el-table ref="homeAdvertiseTable" :data="list" style="width: 100%" @selection-change="handleSelectionChange" v-loading="listLoading" border>
+            <!-- <el-table-column type="selection" width="60" align="center" fixed="left"></el-table-column> -->
             <el-table-column label="序号" width="60" align="center" fixed="left">
               <template slot-scope="scope">{{ scope.row.sort }}</template>
             </el-table-column>
             <el-table-column label="订单号" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+              <template slot-scope="scope">{{ typeEnum[scope.row.type] }}</template>
             </el-table-column>
             <el-table-column label="用户ID" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+              <template slot-scope="scope">{{ typeEnum[scope.row.type] }}</template>
             </el-table-column>
             <el-table-column label="运单号" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+              <template slot-scope="scope">{{ typeEnum[scope.row.type] }}</template>
             </el-table-column>
             <el-table-column label="重量(kg)" align="center" width="150">
               <template slot-scope="scope">{{scope.row.url }}</template>
@@ -80,14 +65,13 @@
             <el-table-column label="物流状态" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.createTime  }}</template>
             </el-table-column>
+            <el-table-column label="无主件" align="center" width="150">
+              <template slot-scope="scope">{{ scope.row.createTime  }}</template>
+            </el-table-column>
 
             <el-table-column label="操作" width="90" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-button size="mini" type="warning" @click="handleUpdate(scope.$index, scope.row)">催付
-                </el-button>
-                <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">编辑
-                </el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">审核
                 </el-button>
               </template>
             </el-table-column>
@@ -99,6 +83,27 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5, 10, 15]" :current-page.sync="listQuery.pageNum" :total="total">
       </el-pagination>
     </div>
+
+    <el-dialog title="审核" :visible.sync="audit.dialogVisible" width="30%">
+      <div class="" style="margin-bottom: 20px">
+        <span style="vertical-align: top; margin-bottom: 20px;">支付凭证：</span>
+        <el-image style="width:80px;height:80px;" :src="curPayPic" :preview-src-list="[curPayPic]" alt=""></el-image>
+      </div>
+      <div style="margin-bottom: 20px">
+        <span style="vertical-align: top">审核状态：</span>
+        <el-radio-group v-model="audit.status">
+          <el-radio :label="1">审核通过</el-radio>
+          <el-radio :label="0">审核不通过</el-radio>
+        </el-radio-group>
+      </div>
+      <span style="vertical-align: top">操作备注：</span>
+      <el-input style="width: 80%" type="textarea" :rows="5" placeholder="请输入内容" v-model="audit.note">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="audit.dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleAuditOrderConfirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -113,12 +118,26 @@ export default {
   name: "homeAdvertiseList",
   data() {
     return {
-      listQuery: Object.assign({}, defaultListQuery),
       tableHeight: 0, // 表格高度
+      listQuery: Object.assign({}, defaultListQuery),
       list: null,
       total: null,
       listLoading: false,
+      typeEnum: ['首页弹屏', "首页banner", "个人中心banner位", '个人中心广告位'],
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
       multipleSelection: [], // 当前选择的列表
+      productCateOptions: [],
+      audit: {
+        // 审核订单
+        dialogVisible: false,
+        status: 1,
+        note: "",
+        id: "",
+        orderSn: '',
+      },
     };
   },
   created() {
@@ -160,22 +179,11 @@ export default {
       this.listQuery.pageNum = val;
       this.getList();
     },
-    // 删除订单
-    handleDelete(index, row) {
-      this.deleteHomeAdvertise(row.id);
-    },
-    // 添加订单
-    handleAdd() {
-      this.$router.push({ path: "/oms/orderDetail" });
-    },
-    // 编辑订单
+    // 审核
     handleUpdate(index, row) {
-      this.$router.push({
-        path: "/oms/orderDetail",
-        query: { id: row.id },
-      });
+      this.audit.dialogVisible = true;
     },
-    // 获取广告列表
+    // 获取列表
     getList() {
       this.listLoading = true;
       fetchList(this.listQuery).then((response) => {
@@ -184,56 +192,9 @@ export default {
         this.total = response.data.total;
       });
     },
-    deleteHomeAdvertise(ids) {
-      this.$confirm("是否要删除该条订单?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-
-        let params = new URLSearchParams();
-        params.append("ids", ids);
-        console.log('ids', params)
-        deleteHomeAdvertise(params).then((response) => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-          if (this.list && this.list.length === 1 && this.listQuery.pageNum > 1) {
-            this.listQuery.pageNum--;
-          }
-          this.getList();
-        });
-      });
-    },
     // 选择列表
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    },
-    // 批量删除
-    batchHandleProduct() {
-      let ids = [];
-      console.log("multipleSelection", this.multipleSelection);
-      // 处理选中的商品id
-      this.multipleSelection &&
-        this.multipleSelection.map((item) => {
-          ids.push(item.id);
-        });
-      if (this.multipleSelection.length < 1) {
-        this.$message({
-          message: "请选选中商品后再进行批量操作！",
-          type: "error",
-          duration: 1000,
-        });
-        return;
-      }
-      this.$confirm("是否要进行批量操作?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-
-      });
     },
   },
 };

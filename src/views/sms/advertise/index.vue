@@ -19,12 +19,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="可见类型：">
-            <el-select v-model="listQuery.type" placeholder="请选择可见类型" clearable class="input-width">
-              <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item>
             <el-button style="float: right" type="primary" @click="handleSearchList()" size="small">
               查询搜索</el-button>
@@ -37,20 +31,12 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <!-- <span>
-        <el-button @click="batchHandleProduct" size="mini"> 批量删除 </el-button>
-      </span> -->
       <el-button size="mini" class="btn-add" @click="handleAdd()">添加广告</el-button>
     </el-card>
     <div class="table-container">
       <el-card class="operate-container" shadow="never">
         <div class="">
-          <!-- <div class="table-tree">
-            <div class="tit">广告图分类</div>
-            <el-tree :data="productCateOptions" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-          </div> -->
-          <el-table ref="homeAdvertiseTable" :data="list" style="width: 100%" @selection-change="handleSelectionChange"
-            v-loading="listLoading" border>
+          <el-table ref="homeAdvertiseTable" :data="list" style="width: 100%" v-loading="listLoading" border>
             <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
             <el-table-column label="ID" width="60" align="center">
               <template slot-scope="scope">{{ scope.row.id }}</template>
@@ -58,9 +44,6 @@
             <el-table-column label="排序" width="60" align="center">
               <template slot-scope="scope">{{ scope.row.sort }}</template>
             </el-table-column>
-            <!-- <el-table-column label="分类" align="center">
-              <template slot-scope="scope">{{ scope.row.name }}</template>
-            </el-table-column> -->
             <el-table-column label="图片" align="center">
               <template slot-scope="scope">
                 <img v-if="scope.row.pic" style="height: 80px" :src="scope.row.pic" />
@@ -97,9 +80,7 @@
       </el-card>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5, 10, 15]"
-        :current-page.sync="listQuery.pageNum" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5, 10, 15]" :current-page.sync="listQuery.pageNum" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -121,8 +102,10 @@ const detaultStatusOptions = [
   { label: "已关闭", value: 0 },
 ];
 const detaultLocationOptions = [
-  { label: "首页banner", value: 1 },
-  { label: "个人中心", value: 4 },
+  { label: '首页弹框', value: 0 },
+  { label: '首页banner', value: 1 },
+  { label: '中转仓地址', value: 2 },
+  { label: '物流跟踪详情', value: 3 },
 ];
 export default {
   name: "homeAdvertiseList",
@@ -132,11 +115,10 @@ export default {
       listQuery: Object.assign({}, defaultListQuery),
       statusOptions: Object.assign({}, detaultStatusOptions),
       locationOptions: Object.assign({}, detaultLocationOptions),
-      // typeOptions: Object.assign({}, detaultTypeOptions),
       list: null,
       total: null,
       listLoading: false,
-      typeEnum: ['首页弹屏', "首页banner", "个人中心banner位", '个人中心广告位'],
+      typeEnum: ['首页弹屏', "首页banner", "中转仓地址", '物流跟踪详情'],
       defaultProps: {
         children: "children",
         label: "label",
@@ -186,10 +168,6 @@ export default {
           });
         }
       });
-    },
-    // 左侧分类点击
-    handleNodeClick(data) {
-      console.log(data);
     },
     // 重置
     handleResetSearch() {
@@ -279,35 +257,6 @@ export default {
           }
           this.getList();
         });
-      });
-    },
-    // 选择列表
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    // 批量删除
-    batchHandleProduct() {
-      let ids = [];
-      console.log("multipleSelection", this.multipleSelection);
-      // 处理选中的商品id
-      this.multipleSelection &&
-        this.multipleSelection.map((item) => {
-          ids.push(item.id);
-        });
-      if (this.multipleSelection.length < 1) {
-        this.$message({
-          message: "请选选中商品后再进行批量操作！",
-          type: "error",
-          duration: 1000,
-        });
-        return;
-      }
-      this.$confirm("是否要进行批量操作?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-
       });
     },
   },
