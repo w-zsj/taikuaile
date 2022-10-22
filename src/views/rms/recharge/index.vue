@@ -3,8 +3,8 @@
     <el-card class="filter-container" shadow="never">
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="会员手机号：">
-            <el-input v-model="listQuery.phone" class="input-width" placeholder="标题"></el-input>
+          <el-form-item label="用户ID：">
+            <el-input v-model="listQuery.nickname" class="input-width" placeholder="请输入用户ID" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <el-button style="float:right" type="primary" @click="handleSearchList()" size="small"> 查询搜索</el-button>
@@ -16,29 +16,26 @@
 
     <div class="table-container">
       <el-table ref="wineKnowledgeTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
-        <el-table-column label="付款图片" width='280' align="center">
+        <el-table-column label="付款图片" width='100' align="center">
           <template slot-scope="scope">
-            <el-image style=" height: 80px;" :src="scope.row.image" :preview-src-list="[scope.row.image]" />
+            <el-image v-if="scope.row.image" style=" height: 80px;" :src="scope.row.image" :preview-src-list="[scope.row.image]" />
           </template>
         </el-table-column>
         <el-table-column label="手机号" align="center">
           <template slot-scope="scope">{{scope.row.phone}}</template>
         </el-table-column>
-        <el-table-column label="昵称" align="center">
+        <el-table-column label="用户ID" align="center">
           <template slot-scope="scope">{{scope.row.nickname}}</template>
         </el-table-column>
         <el-table-column label="原嗨币数量" align="center">
           <template slot-scope="scope">{{scope.row.sourceCoin}}</template>
         </el-table-column>
-        <!-- <el-table-column label="积分改变数量" align="center">
-          <template slot-scope="scope">{{scope.row.changeCount}}</template>
+        <el-table-column label="充值嗨币数量" align="center">
+          <template slot-scope="scope">{{scope.row.changeCount>0?scope.row.changeCount:'-'}}</template>
         </el-table-column>
-        <el-table-column label="改变类型" align="center">
-          <template slot-scope="scope">{{scope.row.changeType==0?'增加':'减少'}}</template>
+        <el-table-column label="总嗨币数量" align="center">
+          <template slot-scope="scope">{{scope.row.afterCoin}}</template>
         </el-table-column>
-        <el-table-column label="积分来源" align="center">
-          <template slot-scope="scope">{{scope.row.sourceType==0?'购物':'管理员修改'}}</template>
-        </el-table-column> -->
         <el-table-column label="操作人员" align="center">
           <template slot-scope="scope">{{scope.row.operateMan}}</template>
         </el-table-column>
@@ -46,9 +43,9 @@
           <template slot-scope="scope">{{scope.row.operateNote}}</template>
         </el-table-column>
         <el-table-column label="状态" align="center">
-          <template slot-scope="scope">{{scope.row.status==0?'待审核':scope.row.status==1?'审核通过':'审核不通过 '}}</template>
+          <template slot-scope="scope">{{scope.row.status==0?'待审核':scope.row.status==1?'充值成功':'充值失败 '}}</template>
         </el-table-column>
-        <el-table-column label="创建时间" align="center">
+        <el-table-column label="创建时间" align="center" width="180">
           <template slot-scope="scope">{{scope.row.createTime | formatTime}}</template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -59,9 +56,7 @@
       </el-table>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5,10,15]"
-        :current-page.sync="listQuery.pageNum" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5,10,15]" :current-page.sync="listQuery.pageNum" :total="total">
       </el-pagination>
     </div>
 

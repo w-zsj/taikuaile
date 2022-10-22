@@ -27,3 +27,11 @@ export function coinOperate(params) {
         data: params
     })
 }
+
+export function addCoin(params) {
+    return request({
+        url: '/memberVip/addCoin',
+        method: 'post',
+        data: params
+    })
+}

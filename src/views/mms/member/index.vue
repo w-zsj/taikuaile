@@ -4,10 +4,10 @@
     <el-card class="filter-container" shadow="never">
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="用户手机号：">
-            <el-input v-model="listQuery.phone" class="input-width" placeholder="用户手机号" clearable></el-input>
+          <el-form-item label="用户ID：">
+            <el-input v-model="listQuery.nickname" class="input-width" placeholder="请输入用户ID" clearable></el-input>
           </el-form-item>
-          <el-form-item label="编号：">
+          <el-form-item label="">
             <el-button style="float: right" type="primary" @click="handleSearchList()" size="small">
               查询搜索</el-button>
             <el-button style="float: right; margin-right: 15px" @click="handleResetSearch()" size="small">
@@ -24,7 +24,7 @@
         <el-table-column label="用户手机号" align="center">
           <template slot-scope="scope">{{ scope.row.phone }}</template>
         </el-table-column>
-        <el-table-column label="用户昵称" align="center">
+        <el-table-column label="用户ID" align="center">
           <template slot-scope="scope">{{ scope.row.nickname }}</template>
         </el-table-column>
         <el-table-column label="注册时间" align="center">
@@ -57,11 +57,6 @@ import { fetchList, setVip } from "@/api/vipCode";
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
-  cardStatus: null,
-  memberId: null,
-  nickName: null,
-  phone: null,
-  memberLevelId: null,
 };
 let self;
 export default {
@@ -122,6 +117,7 @@ export default {
     },
     getList() {
       this.listLoading = true;
+      console.log('listQuery', this.listQuery)
       fetchList(this.listQuery).then((response) => {
         this.listLoading = false;
         this.list = response.data.list;

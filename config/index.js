@@ -20,7 +20,7 @@ module.exports = {
     } : {},
     // Various Dev Server settings
     host: IP.host,//'localhost', // IP.host
-    port: 5431, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 5432, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

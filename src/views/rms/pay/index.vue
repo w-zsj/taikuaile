@@ -1,127 +1,117 @@
-<template> 
+<template>
+   
   <div class="app-container">
-    <el-card class="filter-container" shadow="never">
-      <div style="margin-top: 15px">
-        <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-          <el-form-item label="用户名称：">
-            <el-input v-model="listQuery.title" class="input-width" placeholder="标题"></el-input>
-          </el-form-item>
-          <el-form-item label="消费时间：">
-            <el-date-picker class="input-width" v-model="listQuery.publishedTime" value-format="yyyy-MM-dd" type="date"
-              placeholder="请选择时间">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button style="float:right" type="primary" @click="handleSearchList()" size="small"> 查询搜索</el-button>
-            <el-button style="float:right;margin-right: 15px" @click="handleResetSearch()" size="small"> 重置</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
-
-    <div class="table-container">
-      <el-table ref="wineKnowledgeTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
-        <el-table-column label="标题" align="center">
-          <template slot-scope="scope">{{scope.row.title}}</template>
-        </el-table-column>
-        <el-table-column label="图片" width='280' align="center">
-          <template slot-scope="scope">
-            <el-image style=" height: 80px;" :src="scope.row.pic" :preview-src-list="[scope.row.pic]" />
-          </template>
-        </el-table-column>
-        <el-table-column label="发布时间" align="center">
-          <template slot-scope="scope">{{scope.row.publishedTime | formatTime}}</template>
-        </el-table-column>
-        <el-table-column label="文章类型" align="center">
-          <template slot-scope="scope">{{typeEnum[scope.row.type-1]}}</template>
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="handleUpdate(scope.$index, scope.row)">查看</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        layout="total, sizes,prev, pager, next,jumper" :page-size="listQuery.pageSize" :page-sizes="[5,10,15]"
-        :current-page.sync="listQuery.pageNum" :total="total">
-      </el-pagination>
+    <!-- 支付配置 -->
+    <!-- <el-table ref="wineKnowledgeTable" :data="list" style="width: 100%" border>
+      <el-table-column label="支付名称" align="center">
+        <template slot-scope="scope">{{ scope.row.paytype }}</template>
+      </el-table-column>
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          <el-switch :active-value="1" :inactive-value="0" v-model="scope.row.status" active-text="启用"
+            inactive-text="关闭" @change="changeSwitch(scope.row)">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="描述" align="center">
+        <template slot-scope="scope">{{ scope.row.desc }}</template>
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button size="mini" type="text">查看</el-button>
+        </template>
+      </el-table-column>
+    </el-table> -->
+    <!-- 上传 支付二维码 -->
+    <div class="code">
+      <el-card shadow="never">
+        <el-button size="small" type="primary" style="margin-bottom: 20px" @click.stop="savePayCode">保存</el-button>
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <span>支付二维码：</span>
+            <multi-upload v-model="payUrl" :maxCount="1" :maxSize="5"></multi-upload>
+          </el-col>
+          <el-col :span="4">
+            <span>充值二维码：</span>
+            <multi-upload v-model="rechargeUrl" :maxCount="1" :maxSize="5"></multi-upload>
+          </el-col>
+          <el-col :span="4">
+            <span>客服图片：</span>
+            <multi-upload v-model="kefuUrl" :maxCount="1" :maxSize="5"></multi-upload>
+          </el-col>
+        </el-row>
+      </el-card>
     </div>
   </div>
 </template>
 <script>
-import { payList } from '@/api/paySetting.js'
-const defaultListQuery = {
-  pageNum: 1,
-  pageSize: 10,
-  title: null,
-  publishedTime: null,
-};
+import { payList, payUpdate } from "@/api/paySetting.js";
+import MultiUpload from "@/components/Upload/multiUpload";
 export default {
-  name: "knowledge",
+  components: { MultiUpload },
   data() {
     return {
-      listQuery: Object.assign({}, defaultListQuery),
-      list: null,
-      total: null,
-      listLoading: false,
-      operateType: null,
-      typeEnum: ['h5链接', '图片'],
+      list: [
+        {
+          paytype: "微信支付",
+          status: 1,
+          desc: "jhhhhhhhhh",
+        },
+        {
+          paytype: "钱包支付",
+          status: 0,
+          desc: "jhhhhhhhhh",
+        },
+        {
+          paytype: "人工客服",
+          status: 1,
+          desc: "jhhhhhhhhh",
+        },
+      ],
+      payUrl: [],
+      rechargeUrl: [],
+      kefuUrl: [],
     };
   },
-  created() {
+  mounted() {
     this.getList();
   },
-  mounted() { },
-  filters: {
-    formatTime(time) {
-      if (time == null || time === "") {
-        return "N/A";
-      }
-      return formatDate(time, "yyyy-MM-dd hh:mm:ss");
-    },
-  },
+
   methods: {
-    handleResetSearch() {
-      this.listQuery = Object.assign({}, defaultListQuery);
+    changeSwitch(row) {
+      console.log("row", row);
     },
-    handleSearchList() {
-      this.listQuery.pageNum = 1;
-      this.getList();
-    },
-    handleSizeChange(val) {
-      this.listQuery.pageNum = 1;
-      this.listQuery.pageSize = val;
-      this.getList();
-    },
-    handleCurrentChange(val) {
-      this.listQuery.pageNum = val;
-      this.getList();
-    },
-    //   查看
-    handleUpdate(index, row) {
-
-    },
+    // 获取 支付 充值 二维码
     getList() {
-      this.listLoading = true;
-      payList().then(res => {
-
-      })
+      payList().then(({ code, data }) => {
+        if (code == 1 && data) {
+          this.payUrl = data.payUrl && [data.payUrl];
+          this.rechargeUrl = data.rechargeUrl && [data.rechargeUrl];
+          this.kefuUrl = data.kefuUrl && [data.kefuUrl] || [];
+        }
+      });
+    },
+    // 提交支付 充值 二维码
+    savePayCode() {
+      console.log("payUrl", this.payUrl, this.rechargeUrl);
+      let payUrl = (this.payUrl.length && this.payUrl[0]) || "";
+      let rechargeUrl = (this.rechargeUrl.length && this.rechargeUrl[0]) || "";
+      let kefuUrl = (this.kefuUrl.length && this.kefuUrl[0]) || "";
+      payUpdate({ payUrl, rechargeUrl, kefuUrl }).then((res) => {
+        this.$message({
+          message: `保存成功`,
+          type: "success",
+        });
+      });
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.app-container {
-  height: calc(100vh - 120px);
-}
-.input-width {
-  width: 203px;
-}
-/deep/ .el-image img {
-  width: auto;
+.code {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  margin-top: 50px;
 }
 </style>
-
-
