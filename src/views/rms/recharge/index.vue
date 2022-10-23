@@ -16,13 +16,16 @@
 
     <div class="table-container">
       <el-table ref="wineKnowledgeTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
-        <el-table-column label="付款图片" width='100' align="center">
+        <!-- <el-table-column label="付款图片" width='100' align="center">
           <template slot-scope="scope">
             <el-image v-if="scope.row.image" style=" height: 80px;" :src="scope.row.image" :preview-src-list="[scope.row.image]" />
           </template>
+        </el-table-column> -->
+        <el-table-column label="编号" align="center">
+          <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
-        <el-table-column label="手机号" align="center">
-          <template slot-scope="scope">{{scope.row.phone}}</template>
+        <el-table-column label="充值流水号" align="center" width="180">
+          <template slot-scope="scope">{{scope.row.orderSn}}</template>
         </el-table-column>
         <el-table-column label="用户ID" align="center">
           <template slot-scope="scope">{{scope.row.nickname}}</template>
@@ -48,11 +51,11 @@
         <el-table-column label="创建时间" align="center" width="180">
           <template slot-scope="scope">{{scope.row.createTime | formatTime}}</template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <!-- <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button v-if="scope.row.status==0" size="mini" type="text" @click="audit(scope.row.id)">审核</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <div class="pagination-container">
