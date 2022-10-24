@@ -28,6 +28,12 @@
         <el-form-item label="服务费" prop="serviceCharge">
           <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.serviceCharge" />
         </el-form-item>
+        <el-form-item label="最总运费" prop="serviceCharge">
+          <el-input class="ipt" placeholder="请填写最终运费" clearable v-model.trim="queryParams.serviceCharge" />
+        </el-form-item>
+        <el-form-item label="泰国收件人信息" prop="serviceCharge">
+          <el-input class="ipt" placeholder="请填写泰国收件人信息(姓名，电话，详细地址三项信息请换行)" type="textarea" clearable v-model.trim="queryParams.serviceCharge" />
+        </el-form-item>
         <el-form-item label="离开仓库日期" prop="date">
           <el-date-picker type="datetime" :placeholder="`请选择`" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss" default-time="00:00:00" v-model="queryParams.date" />
         </el-form-item>

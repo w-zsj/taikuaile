@@ -83,12 +83,20 @@
 
             <el-table-column label="操作" width="250" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-button size="mini" type="warning" @click="handleUpdate(scope.$index, scope.row)">催付
-                </el-button>
-                <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">编辑
-                </el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                </el-button>
+                <div>
+                  <el-button size="mini" type="warning" @click="handleUpdate(scope.$index, scope.row)">催付
+                  </el-button>
+                  <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">编辑
+                  </el-button>
+                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                  </el-button>
+                </div>
+                <div>
+                  <el-button size="mini" type="success" plain @click="handleUpdate(scope.$index, scope.row)">到达泰国
+                  </el-button>
+                  <el-button size="mini" type="success" @click="handleUpdate(scope.$index, scope.row)">完成派送
+                  </el-button>
+                </div>
               </template>
             </el-table-column>
           </el-table>
