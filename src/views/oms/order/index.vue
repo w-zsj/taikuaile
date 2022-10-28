@@ -26,9 +26,9 @@
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <span style="float: right">
+      <span>
         <el-button size="mini" type="primary" style="margin-left:20px;" @click="handleAdd()"> 新增 </el-button>
-        <el-button size="mini" class="btn-add" @click="batchHandleProduct">批量删除</el-button>
+        <el-button size="mini" type="danger" @click="batchHandleProduct">批量删除</el-button>
       </span>
     </el-card>
     <div style="margin-top: 20px">
