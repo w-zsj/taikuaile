@@ -100,6 +100,23 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/nwn',
+    component: Layout,
+    redirect: '/nwn/list',
+    name: 'nwn',
+    meta: { title: '无主件管理', icon: 'order-return-reason' },
+    children: [
+      {
+        path: 'list',
+        name: 'nwnOrder',
+        component: () => import('@/views/nwn/index.vue'),
+        meta: { title: '无主件管理', icon: 'order-return-reason' },
+      },
+
+
+    ]
+  },
+  {
     path: '/rms',
     component: Layout,
     redirect: '/rms/pay',

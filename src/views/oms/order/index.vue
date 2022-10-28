@@ -5,19 +5,19 @@
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
           <el-form-item label="用户ID：">
-            <el-select v-model="listQuery.status" placeholder="请选择仓库类型" clearable class="input-width">
+            <el-select v-model="listQuery.nickName" placeholder="请选择仓库类型" clearable class="input-width">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="运单号：">
-            <el-select v-model="listQuery.status" placeholder="请选择归属组织" clearable class="input-width">
+            <el-select v-model="listQuery.deliverySn" placeholder="请选择归属组织" clearable class="input-width">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="转运单号：">
-            <el-input v-model="listQuery.title" class="input-width" placeholder="请输入运单号"></el-input>
+            <el-input v-model="listQuery.outDeliverySn" class="input-width" placeholder="请输入运单号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button style="float: right" type="primary" @click="handleSearchList()" size="small">
@@ -35,46 +35,51 @@
         <el-button size="mini" type="primary" style="margin-left:20px;" @click="handleAdd()"> 新增 </el-button>
         <el-button size="mini" class="btn-add" @click="batchHandleProduct">批量删除</el-button>
       </span>
-
     </el-card>
+    <div style="margin-top: 20px">
+      <el-tabs v-model="activeName" type="card" @tab-click="selectStatus">
+        <el-tab-pane v-for="(item, index) in statusOptions" :key="index" :label="item.label" :name="item.name">
+        </el-tab-pane>
+      </el-tabs>
+    </div>
     <div class="table-container">
       <el-card class="operate-container" shadow="never">
         <div class="">
           <el-table ref="homeAdvertiseTable" :max-height="tableHeight" :data="list" style="width: 100%" @selection-change="handleSelectionChange" v-loading="listLoading" border>
             <el-table-column type="selection" width="60" align="center" fixed="left"></el-table-column>
             <el-table-column label="序号" width="60" align="center" fixed="left">
-              <template slot-scope="scope">{{ scope.row.sort }}</template>
+              <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
             <el-table-column label="订单号" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+              <template slot-scope="scope">{{ scope.row.orderSn }}</template>
             </el-table-column>
             <el-table-column label="用户ID" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+              <template slot-scope="scope">{{ scope.row.nickName }}</template>
             </el-table-column>
-            <el-table-column label="运单号" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.type }}</template>
+            <el-table-column label="转运单号" align="center" width="150">
+              <template slot-scope="scope">{{ scope.row.outDeliverySn }}</template>
             </el-table-column>
             <el-table-column label="重量(kg)" align="center" width="150">
-              <template slot-scope="scope">{{scope.row.url }}</template>
+              <template slot-scope="scope">{{scope.row.weight }}</template>
             </el-table-column>
             <el-table-column label="长宽高(cm)" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.createTime || "-" }}</template>
+              <template slot-scope="scope">{{ scope.row.length*scope.row.width*scope.row.height }}</template>
             </el-table-column>
             <el-table-column label="服务费(฿)" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.createTime || "-" }}</template>
             </el-table-column>
             <el-table-column label="最终运费(฿)" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.createTime || "-" }}</template>
+              <template slot-scope="scope">{{ scope.row.totalAmount || "-" }}</template>
             </el-table-column>
 
             <el-table-column label="离开仓库日期" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.createTime || "-" }}</template>
+              <template slot-scope="scope">{{ scope.row.deliveryTime || "-" }}</template>
             </el-table-column>
             <el-table-column label="泰国收件人信息" align="center" width="150">
               <template slot-scope="scope">
-                <div>姓名</div>
-                <div>手机</div>
-                <div>地址</div>
+                <div>姓名：{{scope.row.receiverName}}</div>
+                <div>手机：{{scope.row.receiverPhone}}</div>
+                <div>地址：{{scope.row.receiverDetailAddress}}</div>
               </template>
             </el-table-column>
             <el-table-column label="物流状态" align="center" width="150">
@@ -110,8 +115,7 @@
   </div>
 </template>
 <script>
-import { fetchList, updateStatus, deleteHomeAdvertise } from "@/api/homeAdvertise";
-import { fetchListWithChildren } from "@/api/productCate";
+import { fetchList } from "@/api/order";
 import { formatDate } from "@/utils/date";
 const defaultListQuery = {
   pageNum: 1,
@@ -123,10 +127,38 @@ export default {
     return {
       listQuery: Object.assign({}, defaultListQuery),
       tableHeight: 0, // 表格高度
-      list: null,
-      total: null,
+      list: [],
+      total: 0,
       listLoading: false,
       multipleSelection: [], // 当前选择的列表
+      activeName: "all",
+      statusOptions: [
+        {
+          label: "全部",
+          value: null,
+          name: "all",
+        },
+        {
+          label: "已入库",
+          value: 0,
+          name: "wait_pay",
+        },
+        {
+          label: "待支付",
+          value: 1,
+          name: "wait_sent",
+        },
+        {
+          label: "派送中",
+          value: 3,
+          name: "wait_get",
+        },
+        {
+          label: "已签收",
+          value: 4,
+          name: "already_cancel",
+        },
+      ],
     };
   },
   created() {
@@ -138,14 +170,6 @@ export default {
       this.tableHeight = h - 100;
     });
   },
-  filters: {
-    formatTime(time) {
-      if (time == null || time === "") {
-        return "-";
-      }
-      return formatDate(time, "yyyy-MM-dd hh:mm:ss");
-    },
-  },
   methods: {
 
     // 重置
@@ -155,6 +179,13 @@ export default {
     // 搜索
     handleSearchList() {
       this.listQuery.pageNum = 1;
+      this.getList();
+    },
+    // 根据状态查询
+    selectStatus() {
+      this.listQuery["status"] = this.statusOptions.find(
+        (i) => i.name == this.activeName
+      ).value;
       this.getList();
     },
     // 分页 修改size
@@ -183,12 +214,15 @@ export default {
         query: { id: row.id },
       });
     },
-    // 获取广告列表
+    // 获取列表
     getList() {
       this.listLoading = true;
-      fetchList(this.listQuery).then((response) => {
+      let listQuery = JSON.parse(JSON.stringify(this.listQuery));
+      fetchList(listQuery).then((response) => {
         this.listLoading = false;
-        this.list = response.data.list;
+        if (response.data.list) {
+          this.list = response.data.list || [];
+        }
         this.total = response.data.total;
       });
     },

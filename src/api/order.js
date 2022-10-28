@@ -10,10 +10,18 @@ import request from '@/utils/request'
 export function fetchList(params) {
   return request({
     url: '/order/list',
-    method: 'get',
-    params: params
+    method: 'post',
+    data: params
   })
 }
+export function addOrder(params) {
+  return request({
+    url: '/order/addOrder',
+    method: 'post',
+    data: params
+  })
+}
+
 export function editPrice(params) {
   return request({
     url: '/order/modifyPrice',

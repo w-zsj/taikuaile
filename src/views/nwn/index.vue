@@ -5,10 +5,7 @@
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px" :max-height="tableHeight">
           <el-form-item label="运单号：">
-            <el-select v-model="listQuery.status" placeholder="请选择归属组织" clearable class="input-width">
-              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+            <el-input v-model="listQuery.title" class="input-width" placeholder="请输入运单号"></el-input>
           </el-form-item>
           <el-form-item label="转运单号：">
             <el-input v-model="listQuery.title" class="input-width" placeholder="请输入运单号"></el-input>
@@ -130,6 +127,7 @@ export default {
       },
       multipleSelection: [], // 当前选择的列表
       productCateOptions: [],
+      curPayPic: '',
       audit: {
         // 审核订单
         dialogVisible: false,
@@ -196,6 +194,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    handleAuditOrderConfirm() { }
   },
 };
 </script>
