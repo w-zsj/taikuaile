@@ -6,15 +6,15 @@
           <el-switch v-model="queryParams.nomainpart" :active-value="1" :inactive-value="0">
           </el-switch>
         </el-form-item>
-        <el-form-item label="用户ID" prop="userid" :rules="[
+        <el-form-item label="用户ID" prop="nickName" :rules="[
      { required: !queryParams.nomainpart, message: '请输入用户id', trigger: 'blue' } ]">
           <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.nickName" />
         </el-form-item>
         <el-form-item label="国内运单号" prop="deliverySn">
           <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.deliverySn" />
         </el-form-item>
-        <el-form-item label="转运单号" prop="transshipmentOrderNo">
-          <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.transshipmentOrderNo" />
+        <el-form-item label="转运单号" prop="outDeliverySn">
+          <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.outDeliverySn" />
         </el-form-item>
         <el-form-item label="长(cm)" prop="length">
           <el-input class="ipt" placeholder="请输入长" clearable v-model.trim="queryParams.length" />
@@ -31,10 +31,10 @@
         <el-form-item label="服务费(฿)" prop="serviceFee">
           <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.serviceFee" />
         </el-form-item>
-        <el-form-item label="最总运费" prop="totalAmount">
+        <el-form-item label="最总运费" prop="totalAmount" v-if="isEdit">
           <el-input class="ipt" placeholder="请填写最终运费" clearable v-model.trim="queryParams.totalAmount" />
         </el-form-item>
-        <el-form-item label="泰国收件人信息" prop="serviceCharge">
+        <el-form-item label="泰国收件人信息" prop="serviceCharge" v-if="isEdit">
           <el-input class="ipt" placeholder="请填写泰国收件人信息(姓名，电话，详细地址三项信息请换行)" type="textarea" :rows="4" clearable v-model="queryParams.detailAddr" />
         </el-form-item>
         <el-form-item label="离开仓库日期" prop="deliveryTime">
@@ -45,7 +45,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="handleNext('addOrderForm')" :loading="btnLoading">取消 </el-button>
+          <el-button @click="goBack" :loading="btnLoading">取消 </el-button>
           <el-button type="primary" @click="handleNext('addOrderForm')" :loading="btnLoading">发布 </el-button>
         </el-form-item>
       </el-form>
@@ -53,14 +53,16 @@
   </div>
 </template>
 <script>
-import { addOrder } from "@/api/order";
+import { addOrder, getOrderDetail, updateOrder } from "@/api/order";
 export default {
   data() {
     return {
-      queryParams: {},
+      queryParams: {
+        detailAddr: ''
+      },
       rules: {
         deliverySn: [{ required: true, message: '请填写国内运单号', trigger: 'blue' }],
-        transshipmentOrderNo: [{ required: true, message: '请填写转运单号', trigger: 'blue' }],
+        outDeliverySn: [{ required: true, message: '请填写转运单号', trigger: 'blue' }],
         weight: [{ required: true, message: '请输入包裹重量', trigger: 'blue' }],
         length: [{ required: true, message: '请输入包裹长', trigger: 'blue' }],
         width: [{ required: true, message: '请输入包裹宽', trigger: 'blue' }],
@@ -69,10 +71,28 @@ export default {
         deliveryTime: [{ required: true, message: '请选择离仓日期', trigger: 'blue' }],
         totalAmount: [{ required: true, message: '请填写最终运费', trigger: 'blue' }],
       },
-      btnLoading: false
+      btnLoading: false,
+      isEdit: false
     };
   },
+  mounted() {
+    let { id } = this.$route.query;
+    if (id) {
+      this.isEdit = true;
+      getOrderDetail(id).then(res => {
+        if (res.code == 1) {
 
+          let { receiverName = '', receiverPhone = '', receiverDetailAddress = '' } = res.data;
+          if (receiverName)
+            res.data.detailAddr = receiverName + '\n' + receiverPhone + '\n' + receiverDetailAddress
+          this.queryParams = res.data;
+          console.log('receiverName', this.queryParams)
+        }
+
+      })
+    }
+
+  },
   methods: {
     handleNext(formName) {
       this.$refs[formName].validate((valid, err) => {
@@ -85,20 +105,33 @@ export default {
           })
             .then(() => {
               this.btnLoading = false;
-              let detailAddr
               if (this.queryParams.detailAddr) {
+                let length = this.queryParams.detailAddr.split('\n').length;
+                if (length != 3) {
+                  this.$message.error('请核对收件人信息是否填写完成')
+                  return
+                }
                 let [receiverName, receiverPhone, receiverDetailAddress] = this.queryParams.detailAddr.split('\n');
                 this.queryParams = { ...this.queryParams, receiverName, receiverPhone, receiverDetailAddress };
-                delete this.queryParams.detailAddr;
-
               }
+              delete this.queryParams.detailAddr;
+              delete this.queryParams.nomainpart;
               console.log('this.queryParams', this.queryParams)
-              addOrder(this.queryParams).then(res => {
-
+              let api = this.isEdit ? updateOrder : addOrder;
+              api(this.queryParams).then(res => {
+                this.$message({
+                  type: "success",
+                  message: this.isEdit ? '编辑成功' : "添加成功!",
+                });
+                this.goBack();
               })
             })
         }
       })
+    },
+    goBack() {
+      this.queryParams = {};
+      this.$router.replace('/oms/order')
     }
   },
 };

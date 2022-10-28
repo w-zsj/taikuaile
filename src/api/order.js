@@ -21,6 +21,14 @@ export function addOrder(params) {
     data: params
   })
 }
+export function updateOrder(params) {
+  return request({
+    url: '/order/update',
+    method: 'post',
+    data: params
+  })
+}
+
 
 export function editPrice(params) {
   return request({
@@ -42,9 +50,37 @@ export function deleteOrder(params) {
   return request({
     url: '/order/delete',
     method: 'post',
-    params: params
+    data: params
   })
 }
+
+// 催付
+export function remind(id) {
+  return request({
+    url: '/order/remind',
+    method: 'post',
+    data: { id }
+  })
+}
+// 到达泰国
+export function updateArrive(id) {
+  return request({
+    url: '/order/update/arrive',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 确认送达
+export function updateConfirm(id) {
+  return request({
+    url: '/order/update/confirm',
+    method: 'post',
+    data: { id }
+  })
+}
+
+
 
 export function deliveryOrder(data) {
   return request({
