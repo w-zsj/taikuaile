@@ -88,9 +88,8 @@ const defaultHomeAdvertise = {
   url: null,
   note: null,
   sort: 0,
-  productId: '',
   adUrl: '',
-  urlType: 1,
+  urlType: null,
   frequency: 1,
   adPic: []
 };
@@ -101,7 +100,7 @@ const defaultUriOptions = [
   { label: '我的', value: '/pages/mine/index' },
   { label: '仓库地址', value: '/packPages/china-warehouse/index' },
 ]
-const defaultAdTypeOptions = ['productId', 'adUrl', 'adPic', 'pageUrl',]
+const defaultAdTypeOptions = ['adUrl', 'adPic', 'pageUrl',]
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
@@ -172,25 +171,18 @@ export default {
   },
   mounted() {
     if (this.isEdit) {
-      debugger
       getHomeAdvertise(this.$route.query.id).then((response) => {
         this.homeAdvertise = response.data;
         if (this.homeAdvertise.pic) {
           this.$set(this.homeAdvertise, 'uploadPic', [this.homeAdvertise.pic]);
         }
         if (this.homeAdvertise.url) {
-          const i = this.homeAdvertise.url.indexOf('goods-detail');
-          if (i > -1) {
-            const index = this.homeAdvertise.url.indexOf('=');
-            this.$set(this.homeAdvertise, 'productId', this.homeAdvertise.url.substr(index + 1));
+          const { urlType } = this.homeAdvertise;
+          if ([2, 4].some(v => v === urlType)) {
+            const attr = defaultAdTypeOptions[urlType - 2];
+            this.$set(this.homeAdvertise, attr, this.homeAdvertise.url);
           } else {
-            const { urlType } = this.homeAdvertise;
-            if ([2, 4].some(v => v === urlType)) {
-              const attr = defaultAdTypeOptions[urlType - 1];
-              this.$set(this.homeAdvertise, attr, this.homeAdvertise.url);
-            } else {
-              this.$set(this.homeAdvertise, 'adPic', [this.homeAdvertise.url]);
-            }
+            this.$set(this.homeAdvertise, 'adPic', [this.homeAdvertise.url]);
           }
         }
       });
@@ -221,19 +213,12 @@ export default {
             const { uploadPic } = this.homeAdvertise;
             let pic = uploadPic + "";
             this.homeAdvertise.pic = pic;
-            if (urlType === 1) {
-              this.homeAdvertise.url = `/pages/mall/goods-detail/goods-detail?id=${this.homeAdvertise.productId}`;
-              const keys = ['adUrl', 'adPic', 'pageUrl'];
-              keys.forEach(key => this.homeAdvertise[key] = null);
+            const attr = defaultAdTypeOptions[urlType - 2];
+            const url = this.homeAdvertise[attr];
+            if (typeCheckUtil.isArray(url)) {
+              this.homeAdvertise.url = url[0];
             } else {
-              const attr = defaultAdTypeOptions[urlType - 1];
-              const url = this.homeAdvertise[attr];
-              if (typeCheckUtil.isArray(url)) {
-                this.homeAdvertise.url = url[0];
-              } else {
-                this.homeAdvertise.url = url;
-              }
-              this.homeAdvertise.productId = '';
+              this.homeAdvertise.url = url;
             }
             if (this.isEdit) {
               updateHomeAdvertise(this.$route.query.id, this.homeAdvertise).then((response) => {
@@ -273,7 +258,7 @@ export default {
     },
 
     handleUrlTypeChange(val) {
-      this.$set(this.homeAdvertise, defaultAdTypeOptions[val - 1], val == 3 ? [] : '')
+      this.$set(this.homeAdvertise, defaultAdTypeOptions[val - 2], val == 3 ? [] : '')
     },
   },
 };

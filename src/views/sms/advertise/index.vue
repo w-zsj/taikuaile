@@ -64,7 +64,7 @@
                 {{ scope.row.status==1?'开启':'已禁用' }}
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="90" align="center">
+            <el-table-column label="操作" width="150" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="handleUpdateStatus(scope.$index, scope.row)">
                   {{ scope.row.status==1?'禁用':'开启' }}
