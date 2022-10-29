@@ -101,8 +101,7 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteOrder, orderApprove } from "@/api/order";
-import { formatDate } from "@/utils/date";
+import { fetchList, orderApprove } from "@/api/order";
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
