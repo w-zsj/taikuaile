@@ -31,9 +31,9 @@
         <el-form-item label="服务费(฿)" prop="serviceFee">
           <el-input class="ipt" placeholder="请输入" clearable v-model.trim="queryParams.serviceFee" />
         </el-form-item>
-        <el-form-item label="物品分类" prop="classify">
-          <el-select class="ipt" v-model="queryParams.classify" placeholder="请选择" size="small">
-            <el-option v-for="item in classifyOpt" :key="item.id" :label="item.name" :value="item.id">
+        <el-form-item label="物品分类" prop="goodsType">
+          <el-select class="ipt" v-model="queryParams.goodsType" placeholder="请选择" size="small">
+            <el-option v-for="item in classifyOpt" :key="item.id" :label="item.name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item>
@@ -69,19 +69,23 @@ export default {
       classifyOpt: [
         {
           id: 1,
-          name: "A类"
+          name: "A类",
+          key: 'A'
         },
         {
           id: 2,
-          name: "B类"
+          name: "B类",
+          key: 'B'
         },
         {
           id: 3,
-          name: "C类"
+          name: "C类",
+          key: 'C'
         },
         {
           id: 4,
-          name: "其他"
+          name: "其他",
+          key: '其他'
         }
       ],
       rules: {
@@ -92,7 +96,7 @@ export default {
         serviceFee: [{ required: true, message: '请填写服务费', trigger: 'blue' }],
         deliveryTime: [{ required: true, message: '请选择离仓日期', trigger: 'blue' }],
         totalAmount: [{ required: true, message: '请填写最终运费', trigger: 'blue' }],
-        classify: [{ required: true, message: '请选择物品分类', trigger: 'blue' }],
+        goodsType: [{ required: true, message: '请选择物品分类', trigger: 'blue' }],
       },
       btnLoading: false,
       isEdit: false
@@ -137,13 +141,12 @@ export default {
                   return
                 }
                 let [receiverName, receiverPhone, receiverDetailAddress] = this.queryParams.detailAddr.split('\n');
-                let [length, width, height] = this.queryParams.size.split('*');
-                this.queryParams = { ...this.queryParams, receiverName, receiverPhone, receiverDetailAddress, length, width, height };
-
+                this.queryParams = { ...this.queryParams, receiverName, receiverPhone, receiverDetailAddress };
               }
+              let [length, width, height] = this.queryParams.size.split('*');
+              this.queryParams = { ...this.queryParams, length, width, height };
               delete this.queryParams.detailAddr;
               delete this.queryParams.nomainpart;
-              console.log('this.queryParams', this.queryParams)
               let api = this.isEdit ? updateOrder : addOrder;
               api(this.queryParams).then(res => {
                 if (res.code == 1) {
