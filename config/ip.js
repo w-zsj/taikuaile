@@ -1,4 +1,4 @@
-let proxyTable = false, target = "'http://testapi.taihail.com/express-admin'" // "'http://testapi.taihail.com/admin'"
+let proxyTable = false, target = "'http://testapi.taihail.com/express-admin'"
 
 //获取本地ip
 function getIPAdress() {

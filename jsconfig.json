@@ -1,0 +1,16 @@
+{
+  "allowJs": true,
+  "compilerOptions": {
+    "jsx":"preserve",
+    "types": [
+      "@dcloudio/types",
+      "miniprogram-api-typings",
+      "mini-types"
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
