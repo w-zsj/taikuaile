@@ -42,6 +42,52 @@ export const constantRouterMap = [
 ]
 
 export const asyncRouterMap = [
+
+  {
+    path: '/nwn',
+    component: Layout,
+    redirect: '/nwn/list',
+    name: 'nwn',
+    meta: { title: '无主件管理', icon: 'order-return-reason' },
+    children: [
+      {
+        path: 'list',
+        name: 'nwnOrder',
+        component: () => import('@/views/nwn/index.vue'),
+        meta: { title: '无主件管理', icon: 'order-return-reason' },
+      },
+
+
+    ]
+  },
+  {
+    path: '/oms',
+    component: Layout,
+    redirect: '/oms/trade',
+    name: 'oms',
+    meta: { title: '交易管理', icon: 'total-week' },
+    children: [
+      {
+        path: 'order',
+        name: 'omsOrder',
+        component: () => import('@/views/oms/order/index.vue'),
+        meta: { title: '订单列表', icon: 'product-list' },
+      },
+      {
+        path: 'orderDetail',
+        name: 'orderDetail',
+        component: () => import('@/views/oms/order/orderDetail'),
+        meta: { title: '订单详情' },
+        hidden: true
+      },
+      // {
+      //   path: 'orderSetting',
+      //   name: 'orderSetting',
+      //   component: () => import('@/views/oms/order/setting'),
+      //   meta: { title: '订单设置', icon: 'order-setting' }
+      // },
+    ]
+  },
   {
     path: '/sms',
     component: Layout,
@@ -69,51 +115,6 @@ export const asyncRouterMap = [
         meta: { title: '编辑广告' },
         hidden: true
       },
-    ]
-  },
-  {
-    path: '/oms',
-    component: Layout,
-    redirect: '/oms/trade',
-    name: 'oms',
-    meta: { title: '交易管理', icon: 'total-week' },
-    children: [
-      {
-        path: 'order',
-        name: 'omsOrder',
-        component: () => import('@/views/oms/order/index.vue'),
-        meta: { title: '订单列表', icon: 'product-list' },
-      },
-      {
-        path: 'orderDetail',
-        name: 'orderDetail',
-        component: () => import('@/views/oms/order/orderDetail'),
-        meta: { title: '订单详情' },
-        hidden: true
-      },
-      {
-        path: 'orderSetting',
-        name: 'orderSetting',
-        component: () => import('@/views/oms/order/setting'),
-        meta: { title: '订单设置', icon: 'order-setting' }
-      },
-    ]
-  },
-  {
-    path: '/nwn',
-    component: Layout,
-    redirect: '/nwn/list',
-    name: 'nwn',
-    meta: { title: '无主件管理', icon: 'order-return-reason' },
-    children: [
-      {
-        path: 'list',
-        name: 'nwnOrder',
-        component: () => import('@/views/nwn/index.vue'),
-        meta: { title: '无主件管理', icon: 'order-return-reason' },
-      },
-
-
     ]
   },
   {
