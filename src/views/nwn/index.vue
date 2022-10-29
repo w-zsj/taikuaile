@@ -42,7 +42,10 @@
               <template slot-scope="scope">{{scope.row.weight }}</template>
             </el-table-column>
             <el-table-column label="长宽高(cm)" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.length*scope.row.width*scope.row.height }}</template>
+              <template slot-scope="scope">{{ scope.row.length+'*'+scope.row.width+'*'+scope.row.height }}</template>
+            </el-table-column>
+            <el-table-column label="商品分类" align="center" width="150">
+              <template slot-scope="scope">{{ scope.row.classify}}</template>
             </el-table-column>
             <el-table-column label="服务费(฿)" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.serviceFee || "-" }}</template>
