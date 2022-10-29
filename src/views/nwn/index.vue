@@ -66,10 +66,9 @@
             <el-table-column label="物流状态" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.status |statusTxt }}</template>
             </el-table-column>
-            <el-table-column label="无主件" align="center" width="150">
-              <template slot-scope="scope">{{ scope.row.nobody?'是':'否' }}</template>
+            <el-table-column label="备注" align="center" width="150">
+              <template slot-scope="scope">{{ scope.row.note}}</template>
             </el-table-column>
-
             <el-table-column label="操作" width="100" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-button size="mini" type="warning" @click="changeAudit( scope.row)">审核</el-button>
@@ -107,6 +106,7 @@ import { formatDate } from "@/utils/date";
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
+  nobody: true
 };
 export default {
   name: "homeAdvertiseList",
@@ -175,13 +175,24 @@ export default {
       this.getList();
     },
     // 审核
-    changeAudit({ id, orderSn, payImageUrl }) {
+    changeAudit({ id, orderSn }) {
+      this.$confirm(`请确认无误后审核?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        orderApprove({ status: 1, note: "", id, orderSn }).then((res) => {
+          if (res.code == 1) {
+            this.getList();
+          }
+        });
+      })
 
-      this.audit.dialogVisible = true;
-      this.audit.id = id;
-      this.audit.orderSn = orderSn;
-      this.curPayPic = payImageUrl;
-      console.log('status, note, id, orderSn', id, orderSn, this.audit)
+      // this.audit.dialogVisible = true;
+      // this.audit.id = id;
+      // this.audit.orderSn = orderSn;
+      // this.curPayPic = payImageUrl;
+      // console.log('status, note, id, orderSn', id, orderSn, this.audit)
     },
     handleAuditOrderConfirm() {
       let { status, note, id, orderSn } = this.audit;

@@ -85,7 +85,9 @@
             <el-table-column label="订单状态" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.status |statusTxt }}</template>
             </el-table-column>
-
+            <el-table-column label="备注" align="center" width="150">
+              <template slot-scope="scope">{{ scope.row.note}}</template>
+            </el-table-column>
             <el-table-column label="操作" width="250" align="center" fixed="right">
               <template slot-scope="scope">
                 <div>
