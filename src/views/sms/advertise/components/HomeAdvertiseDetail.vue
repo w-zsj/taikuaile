@@ -11,7 +11,7 @@
         <el-input v-model="homeAdvertise.name" class="input-width"></el-input>
       </el-form-item>
       <el-form-item label="广告图片：" prop="uploadPic">
-        <multiUpload v-model="homeAdvertise.uploadPic" :maxCount='1' :picWidth="picWidth" :picHeight='picHeight' acceptType='.png,.gif,.jpg' :tipText='tipText' />
+        <multiUpload v-model="homeAdvertise.uploadPic" :maxCount='1' :picWidth="180" :picHeight='200' acceptType='.png,.gif,.jpg' :tipText='tipText' />
       </el-form-item>
       <el-form-item label="上线时间：" prop="startTime">
         <el-date-picker type="datetime" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" v-model="homeAdvertise.startTime"></el-date-picker>
@@ -74,8 +74,8 @@ import { typeCheckUtil } from '@/utils/index';
 const defaultTypeOptions = [
   { label: '首页弹框', value: 0 },
   { label: '首页banner', value: 1 },
-  { label: '中转仓地址', value: 2 },
-  { label: '物流跟踪详情', value: 3 },
+  { label: '中转仓地址banner', value: 2 },
+  { label: '物流跟踪详情banner', value: 3 },
 
 ];
 const defaultHomeAdvertise = {
@@ -152,13 +152,10 @@ export default {
         ],
         uploadPic: [{ required: true, validator: picValid }],
         adUrl: [{ required: true, message: "请输入广告链接", trigger: "blur" }],
-        // productId: [{ required: true, message: "请输入商品ID", trigger: "blur" }],
         startTime: [{ required: true, message: "请选择上线时间", trigger: "blur" }],
         pageUrl: [{ required: true, message: "请选择页面路径", trigger: "blur" }]
       },
       typeOptions: Object.assign({}, defaultTypeOptions),
-      picHeight: 200,
-      picWidth: 190,
       list: [],
       total: 0,
       listLoading: false,
@@ -175,9 +172,9 @@ export default {
   },
   mounted() {
     if (this.isEdit) {
+      debugger
       getHomeAdvertise(this.$route.query.id).then((response) => {
         this.homeAdvertise = response.data;
-        this.checkSize(this.homeAdvertise.type);
         if (this.homeAdvertise.pic) {
           this.$set(this.homeAdvertise, 'uploadPic', [this.homeAdvertise.pic]);
         }
@@ -272,24 +269,11 @@ export default {
       this.homeAdvertise = Object.assign({}, defaultHomeAdvertise);
     },
     handleLocationChange(val) {
-      this.checkSize(val);
       this.$set(this.homeAdvertise, 'urlType', 1);
     },
-    checkSize(type) {
-      if (type === 1) {
-        // 首页banner
-        this.picWidth = 200;
-        this.picHeight = 190;
-      } else {
-        // 个人中心
-        this.picWidth = 300;
-        this.picHeight = 100;
-      }
-    },
+
     handleUrlTypeChange(val) {
-      // console.log(val, this.$refs['homeAdvertiseForm'].clearValidate, defaultAdTypeOptions[val - 1])
-      this.$set(this.homeAdvertise, defaultAdTypeOptions[val - 1], '')
-      // this.$refs['homeAdvertiseForm'].clearValidate([defaultAdTypeOptions[val - 1]]);
+      this.$set(this.homeAdvertise, defaultAdTypeOptions[val - 1], val == 3 ? [] : '')
     },
   },
 };

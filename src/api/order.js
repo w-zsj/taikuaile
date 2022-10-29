@@ -29,7 +29,15 @@ export function updateOrder(params) {
   })
 }
 
-
+// 订单数量
+export function countOrder(params) {
+  return request({
+    url: '/order/count',
+    method: 'post',
+    data: params
+  })
+}
+// 
 export function editPrice(params) {
   return request({
     url: '/order/modifyPrice',

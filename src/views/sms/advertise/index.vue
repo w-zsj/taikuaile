@@ -104,8 +104,8 @@ const detaultStatusOptions = [
 const detaultLocationOptions = [
   { label: '首页弹框', value: 0 },
   { label: '首页banner', value: 1 },
-  { label: '中转仓地址', value: 2 },
-  { label: '物流跟踪详情', value: 3 },
+  { label: '中转仓地址banner', value: 2 },
+  { label: '物流跟踪详情banner', value: 3 },
 ];
 export default {
   name: "homeAdvertiseList",
@@ -118,7 +118,7 @@ export default {
       list: null,
       total: null,
       listLoading: false,
-      typeEnum: ['首页弹屏', "首页banner", "中转仓地址", '物流跟踪详情'],
+      typeEnum: ['首页弹屏', "首页banner", "中转仓地址banner", '物流跟踪详情banner'],
       defaultProps: {
         children: "children",
         label: "label",

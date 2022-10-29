@@ -5,14 +5,14 @@
       <div style="margin-top: 15px">
         <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
           <el-form-item label="用户ID：">
-            <el-input v-model="listQuery.nickName" class="input-width" placeholder="请输入用户ID"></el-input>
+            <el-input v-model="listQuery.nickName" class="input-width" clearable placeholder="请输入用户ID"></el-input>
           </el-form-item>
           <el-form-item label="运单号：">
-            <el-input v-model="listQuery.deliverySn" class="input-width" placeholder="请输入运单号"></el-input>
+            <el-input v-model="listQuery.deliverySn" class="input-width" clearable placeholder="请输入运单号"></el-input>
 
           </el-form-item>
           <el-form-item label="转运单号：">
-            <el-input v-model="listQuery.outDeliverySn" class="input-width" placeholder="请输入转运单号"></el-input>
+            <el-input v-model="listQuery.outDeliverySn" class="input-width" clearable placeholder="请输入转运单号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button style="float: right" type="primary" @click="handleSearchList()" size="small">
@@ -82,7 +82,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="物流状态" align="center" width="150">
+            <el-table-column label="订单状态" align="center" width="150">
               <template slot-scope="scope">{{ scope.row.status |statusTxt }}</template>
             </el-table-column>
 
@@ -180,7 +180,7 @@ export default {
       if (!status) return '已入库';
       switch (Number(status)) {
         case 1:
-          return '已入库';
+          return '待支付';
         case 2:
           return '运输中';
         case 3:
