@@ -16,11 +16,6 @@
 
     <div class="table-container">
       <el-table ref="wineKnowledgeTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
-        <!-- <el-table-column label="付款图片" width='100' align="center">
-          <template slot-scope="scope">
-            <el-image v-if="scope.row.image" style=" height: 80px;" :src="scope.row.image" :preview-src-list="[scope.row.image]" />
-          </template>
-        </el-table-column> -->
         <el-table-column label="编号" align="center">
           <template slot-scope="scope">{{scope.row.id}}</template>
         </el-table-column>
