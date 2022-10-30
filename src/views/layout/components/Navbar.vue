@@ -11,9 +11,9 @@
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper flex-aic">
         <span class="user-name">Hi, {{name}}</span>
-        <div class="flex-ctr">
+        <!-- <div class="flex-ctr">
           <img class="user-avatar" :src="logo" />
-        </div>
+        </div> -->
         <i class="el-icon-caret-bottom flex-ctr"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">

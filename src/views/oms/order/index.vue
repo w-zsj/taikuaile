@@ -100,15 +100,14 @@
                   </el-button>
                   <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">编辑
                   </el-button>
-                  <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                  </el-button> -->
-                </div>
-                <div style="padding-top:10px;" v-if="scope.row.status==2 || scope.row.status==3">
                   <el-button size="mini" type="success" plain @click="handle( scope.row,'updateArrive')" v-if="scope.row.status==2">到达泰国
                   </el-button>
                   <el-button size="mini" type="success" @click="handle( scope.row,'updateConfirm')" v-if="scope.row.status==3">完成派送
                   </el-button>
+                  <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                  </el-button> -->
                 </div>
+
               </template>
             </el-table-column>
           </el-table>
