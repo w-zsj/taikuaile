@@ -115,7 +115,6 @@ export default {
             res.data.size = length + '*' + width + '*' + height;
           }
           this.queryParams = res.data;
-          console.log('receiverName', this.queryParams)
         }
 
       })
@@ -142,7 +141,8 @@ export default {
                 }
                 let [receiverName, receiverPhone, receiverDetailAddress] = this.queryParams.detailAddr.split('\n');
                 this.queryParams = { ...this.queryParams, receiverName, receiverPhone, receiverDetailAddress };
-              }
+              } else this.queryParams = { ...this.queryParams, receiverName: '', receiverPhone: '', receiverDetailAddress: '' };
+
               let [length, width, height] = this.queryParams.size.split('*');
               this.queryParams = { ...this.queryParams, length, width, height };
               delete this.queryParams.detailAddr;
