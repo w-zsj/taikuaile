@@ -99,7 +99,8 @@ export default {
         goodsType: [{ required: true, message: '请选择物品分类', trigger: 'blue' }],
       },
       btnLoading: false,
-      isEdit: false
+      isEdit: false,
+      hasAddAddr: false,// 是否已经添加过收货地址
     };
   },
   mounted() {
@@ -108,9 +109,11 @@ export default {
       this.isEdit = true;
       getOrderDetail(id).then(res => {
         if (res.code == 1) {
-
           let { receiverName = '', receiverPhone = '', receiverDetailAddress = '', length, width, height } = res.data;
-          if (receiverName) res.data.detailAddr = receiverName + '\n' + receiverPhone + '\n' + receiverDetailAddress;
+          if (receiverName) {
+            res.data.detailAddr = receiverName + '\n' + receiverPhone + '\n' + receiverDetailAddress;
+            this.hasAddAddr = true;
+          }
           if (length && width && height) {
             res.data.size = length + '*' + width + '*' + height;
           }
@@ -141,7 +144,13 @@ export default {
                 }
                 let [receiverName, receiverPhone, receiverDetailAddress] = this.queryParams.detailAddr.split('\n');
                 this.queryParams = { ...this.queryParams, receiverName, receiverPhone, receiverDetailAddress };
-              } else this.queryParams = { ...this.queryParams, receiverName: '', receiverPhone: '', receiverDetailAddress: '' };
+              } else {
+                this.queryParams = { ...this.queryParams, receiverName: '', receiverPhone: '', receiverDetailAddress: '' };
+                if (this.hasAddAddr) {
+                  this.$message.error('收货地址不能为空')
+                  return
+                }
+              }
 
               let [length, width, height] = this.queryParams.size.split('*');
               this.queryParams = { ...this.queryParams, length, width, height };

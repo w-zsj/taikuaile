@@ -28,7 +28,7 @@
       <span>数据列表</span>
       <span>
         <el-button size="mini" type="primary" style="margin-left:20px;" @click="handleAdd()"> 新增 </el-button>
-        <el-button size="mini" type="danger" @click="batchHandleProduct">批量删除</el-button>
+        <!-- <el-button size="mini" type="danger" @click="batchHandleProduct">批量删除</el-button> -->
       </span>
     </el-card>
     <div style="margin-top: 20px">
@@ -40,8 +40,9 @@
     <div class="table-container">
       <el-card class="operate-container" shadow="never">
         <div class="">
-          <el-table ref="homeAdvertiseTable" :max-height="tableHeight" :data="list" style="width: 100%" @selection-change="handleSelectionChange" v-loading="listLoading" border>
-            <el-table-column type="selection" width="60" align="center" fixed="left"></el-table-column>
+          <!-- @selection-change="handleSelectionChange" -->
+          <el-table ref="homeAdvertiseTable" :max-height="tableHeight" :data="list" style="width: 100%" v-loading="listLoading" border>
+            <!-- <el-table-column type="selection" width="60" align="center" fixed="left"></el-table-column> -->
             <el-table-column label="序号" width="60" align="center" fixed="left">
               <template slot-scope="scope">{{ scope.row.id }}</template>
             </el-table-column>
@@ -99,8 +100,8 @@
                   </el-button>
                   <el-button size="mini" type="primary" @click="handleUpdate(scope.$index, scope.row)">编辑
                   </el-button>
-                  <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                  </el-button>
+                  <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                  </el-button> -->
                 </div>
                 <div style="padding-top:10px;" v-if="scope.row.status==2 || scope.row.status==3">
                   <el-button size="mini" type="success" plain @click="handle( scope.row,'updateArrive')" v-if="scope.row.status==2">到达泰国
