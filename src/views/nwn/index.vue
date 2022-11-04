@@ -74,7 +74,7 @@
             </el-table-column>
             <el-table-column label="操作" width="100" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-button size="mini" type="warning" v-if="item.nickName" @click="changeAudit( scope.row)">审核</el-button>
+                <el-button size="mini" type="warning" v-if="scope.row.nickName" @click="changeAudit( scope.row)">审核</el-button>
               </template>
             </el-table-column>
           </el-table>
