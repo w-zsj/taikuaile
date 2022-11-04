@@ -73,18 +73,18 @@ export function remind(id) {
 // 到达泰国
 export function updateArrive(id) {
   return request({
-    url: '/order/update/arrive/?id=' + id,
+    url: '/order/update/arrive',
     method: 'post',
-    data: {}
+    data: { id }
   })
 }
 
 // 确认送达
 export function updateConfirm(id) {
   return request({
-    url: '/order/update/confirm/?id=' + id,
+    url: '/order/update/confirm',
     method: 'post',
-    data: {}
+    data: { id }
   })
 }
 
