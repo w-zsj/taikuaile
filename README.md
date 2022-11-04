@@ -1,4 +1,4 @@
-# taixiaoyi-admin
+# taihai-admin
 
 ## 前言
 
@@ -56,8 +56,8 @@ src -- 源码目录
 - 访问在线接口无需搭建后台环境，只需将`config/dev.env.js`文件中的`BASE_API`改为[http://admin-api.macrozheng.com](http://admin-api.macrozheng.com)即可;
 - 如果你对接的是[mall-swarm](https://github.com/macrozheng/mall-swarm)微服务后台的话，所有接口都需要通过网关访问，需要将`config/dev.env.js`文件中的`BASE_API`改为[http://localhost:8201/mall-admin](http://localhost:8201/mall-admin)；
 - 克隆源代码到本地，使用 IDEA 打开，并完成编译;
-- 在 IDEA 命令行中运行命令：npm install,下载相关依赖;
-- 在 IDEA 命令行中运行命令：npm run dev,运行项目;
+- 在 IDEA 命令行中运行命令：npm install,下载相关依赖;  101.43.82.253
+- 在 IDEA 命令行中运行命令：npm run dev,运行项目; root/9&FSX1KexTv%
 - 访问地址：[http://localhost:5431](http://localhost:5431) 即可打开后台管理系统页面;
 - 具体部署过程请参考：[mall 前端项目的安装与部署](http://www.macrozheng.com/#/deploy/mall_deploy_web)
 - `注意`：如果遇到无法运行 npm 命令，需要配置 npm 的环境变量，如在 path 变量中添加：C:\Users\zhenghong\AppData\Roaming\npm;
